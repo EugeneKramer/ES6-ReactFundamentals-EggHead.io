@@ -6,20 +6,26 @@ import $ from 'jquery';
 class App extends React.Component {
     constructor(){
         super();
-        this.state={val:0};
+        this.state={val:1};
         this.update=this.update.bind(this);
+        console.log("constructing");
     }
     update(){
+        console.log("update");
         this.setState({val: this.state.val + 1})
     }
     componentWillMount(){
+        this.setState({m:2});
         console.log("mounting");
     }
 
     componentDidMount(){
+        console.log(ReactDOM.findDOMNode(this));
+        this.inc = setInterval(this.update,500);
         console.log("mounted");
     }
-    compnentWillUnmount(){
+    componentWillUnmount(){
+        clearInterval(this.inc);
         console.log("unmounting");
     }
 
@@ -27,7 +33,7 @@ class App extends React.Component {
         console.log("rendering");
         return (
             <button onClick={this.update}>
-                {this.state.val}
+                {this.state.val * this.state.m}
             </button>
         );
     }
