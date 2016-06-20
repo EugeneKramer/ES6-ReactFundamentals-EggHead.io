@@ -2,10 +2,26 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 class App extends React.Component {
+
+    constructor(){
+        super();
+        this.state={
+            txt:"this is a state",
+            cat:0
+        }
+    }
+    update(e){
+        this.setState({txt:e.target.value});
+    }
+
     render(){
-        let txt=this.props.txt;
+        //let txt=this.props.txt;
         return (
-            <div>Hello World!</div>
+            <div>
+                <input type="text"
+                       onChange={this.update.bind(this)}/>
+                <h1>{this.state.txt}</h1>
+            </div>
         );
     }
 }
