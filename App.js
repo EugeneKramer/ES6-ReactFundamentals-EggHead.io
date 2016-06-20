@@ -12,7 +12,6 @@ class App extends React.Component {
     update(){
         this.setState({val: this.state.val + 1})
     }
-
     componentWillMount(){
         console.log("mounting");
     }
@@ -34,45 +33,36 @@ class App extends React.Component {
     }
 }
 
-class Wrapper extends React.Component{
-    constructor(){
+class Wrapper extends React.Component {
+    constructor() {
         super();
     }
-    mount(){
+
+    mount() {
         ReactDOM.render(<App/>, document.getElementById('a'))
     }
-    unmount(){
+
+    unmount() {
         ReactDOM.unmountComponentAtNode(document.getElementById('a'));
     }
-    render(){
+
+    render() {
         return (
             <div>
-                <button onclick={this.mount.bind(this)}>Mount </button>
-                <button></button>
+                <button onClick={this.mount.bind(this)}>Mount</button>
+                <button onClick={this.unmount.bind(this)}>UnMount</button>
                 <div id="a"></div>
             </div>
         )
     }
-
 }
-
-
-
-class Button extends React.Component{
-    render(){
-        return <button>{this.props.children}</button>
-    }
-}
-
-const Heart = ()=> <span className="glyphicon glyphicon-heart">H</span>
-
 
 $(function() {
     ReactDOM.render(
-        <App txt="stuff"/>,
+        <Wrapper txt="stuff"/>,
         document.getElementById('app')
     )
 });
 
 const Thing2 = () => <div><h1>Hello</h1></div>
-export default App;
+export default Wrapper;
