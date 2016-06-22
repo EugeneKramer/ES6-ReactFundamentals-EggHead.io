@@ -6,69 +6,45 @@ import $ from 'jquery';
 class App extends React.Component {
     constructor(){
         super();
-        this.state={val:1};
         this.update=this.update.bind(this);
+        this.state={increasing:false}
         console.log("constructing");
     }
     update(){
-        console.log("update");
-        this.setState({val: this.state.val + 1})
+        ReactDOM.render(
+            <App val={this.props.val+1}/>,
+            document.getElementById('app')
+        );
     }
-    componentWillMount(){
-        this.setState({m:2});
-        console.log("mounting");
+    componentWllReceiveProps(nextProps){
+        this.setState({increasing: nextProps.val > this.props.val})
     }
-
-    componentDidMount(){
-        console.log(ReactDOM.findDOMNode(this));
-        this.inc = setInterval(this.update,500);
-        console.log("mounted");
+    shouldComponenUpdate(nextProps, nextState){
+        return nextProps.val % 5 === 0;
     }
-    componentWillUnmount(){
-        clearInterval(this.inc);
-        console.log("unmounting");
+    componentDidUpdate(prevProps, prevState){
+        console.log('prevprops',prevProps)
     }
 
     render() {
         console.log("rendering");
+        console.log(this.state.increasing);
         return (
             <button onClick={this.update}>
-                {this.state.val * this.state.m}
+                {this.props.val}
             </button>
         );
     }
 }
 
-class Wrapper extends React.Component {
-    constructor() {
-        super();
-    }
-
-    mount() {
-        ReactDOM.render(<App/>, document.getElementById('a'))
-    }
-
-    unmount() {
-        ReactDOM.unmountComponentAtNode(document.getElementById('a'));
-    }
-
-    render() {
-        return (
-            <div>
-                <button onClick={this.mount.bind(this)}>Mount</button>
-                <button onClick={this.unmount.bind(this)}>UnMount</button>
-                <div id="a"></div>
-            </div>
-        )
-    }
-}
+App.defaultProps = {val:0}
 
 $(function() {
-    ReactDOM.render(
-        <Wrapper txt="stuff"/>,
-        document.getElementById('app')
-    )
+    //ReactDOM.render(
+    //    <App txt="stuff"/>,
+    //    document.getElementById('app')
+    //)
 });
 
 const Thing2 = () => <div><h1>Hello</h1></div>
-export default Wrapper;
+export default App;
