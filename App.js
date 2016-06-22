@@ -2,44 +2,62 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 
-class App extends React.Component {
+let Mixin = InnerComponent => class extends React.Component{
     constructor(){
         super();
         this.update=this.update.bind(this);
-        this.state = {increasing:0};
+        this.state = {val:0};
         console.log("constructing");
     }
     update(){
-        console.log("update");
-        console.log(this.props.val);
-
-        ReactDOM.render(
-            <App val={this.props.val+1}/>,
-            document.getElementById('app')
-        );
+        this.setState({val:this.state.val +1})
     }
-
-    componentWillReceiveProps(nextProps, nextContext) {
-        this.setState({increasing:nextProps.val > this.props.val})
+    render(){
+        return (
+            <InnerComponent
+                update={this.update}
+                {...this.state}
+                {...this.props} />
+        )
     }
-
-    shouldComponentUpdate(nextProps, nextState, nextContext) {
-        return nextProps.val % 5 === 0;
+    componentWillMount() {
+        console.log("going to mount");
     }
+}
 
+const Button = (props) =>(
+    <button
+        onClick={props.update}>
+        {props.txt} - {props.val}
+        </button>
+)
+
+const Label = (props) =>(
+    <button
+        onMouseMove ={props.update}>
+        {props.txt} - {props.val}
+    </button>
+)
+
+
+let ButtonMixed = Mixin(Button);
+let LabelMixed=Mixin(Label);
+
+class App extends React.Component {
 
     render() {
         console.log("rrefnderijng");
-        console.log(this.state.increasing);
+        //console.log(this.state.increasing);
         return (
-            <button onClick={this.update}>
-                {this.props.val}
-            </button>
+            <div>
+                <ButtonMixed txt="Button"/>
+                <LabelMixed txt="Label"/>
+            </div>
         );
     }
 }
 
-App.defaultProps = {val:0}
+//App.defaultProps = {val:0}
 
 $(function() {
     ReactDOM.render(
