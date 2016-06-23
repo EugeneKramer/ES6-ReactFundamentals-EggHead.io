@@ -2,36 +2,47 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 
-class App extends React.Component{
+class App extends React.Component {
     constructor() {
         super();
-        this.state={data:[
-            {id:1, name:"A1"},
-            {id:2, name:"A2"}
-        ]}
+        this.state ={
+            input: '/*add jsx here */',
+            output: "",
+            err: ""
+        }
+        this.update=this.update.bind(this);
     }
+
+    update(e){
+        let code = e.target.value;
+        try{
+            this.setState({
+                output:babel.transform(code,{
+                    stage:0,
+                    loose:'all'
+                }).code
+            })
+        }
+        catch(err){
+            this.setState({err:err.message});
+        }
+    }
+
     render(){
-        let rows = this.state.data.map(person => {
-            return <PersonRow data={person} key={person.id} data={person}/>
-        });
         return (
-            <table>
-                <tbody>{rows}</tbody>
-            </table>
+            <div>
+                <header>{this.state.err}</header>
+                <dv className="container">
+                    <textarea
+                        onChange={this.update}
+                        defaultValue={this.state.input}>
+                        </textarea>
+                    <pre>{this.state.output}</pre>
+                </dv>
+            </div>
         )
     }
 }
-
-const PersonRow = (props) => {
-    "use strict";
-    return (
-        <tr>
-            <td>{props.data.id}</td>
-            <td>{props.data.name}</td>
-        </tr>
-    )
-}
-
 
 $(function() {
     ReactDOM.render(
