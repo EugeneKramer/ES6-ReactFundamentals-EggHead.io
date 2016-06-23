@@ -2,62 +2,36 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 
-let Mixin = InnerComponent => class extends React.Component{
-    constructor(){
+class App extends React.Component{
+    constructor() {
         super();
-        this.update=this.update.bind(this);
-        this.state = {val:0};
-        console.log("constructing");
-    }
-    update(){
-        this.setState({val:this.state.val +1})
+        this.state={data:[
+            {id:1, name:"A1"},
+            {id:2, name:"A2"}
+        ]}
     }
     render(){
+        let rows = this.state.data.map(person => {
+            return <PersonRow data={person} key={person.id} data={person}/>
+        });
         return (
-            <InnerComponent
-                update={this.update}
-                {...this.state}
-                {...this.props} />
+            <table>
+                <tbody>{rows}</tbody>
+            </table>
         )
     }
-    componentWillMount() {
-        console.log("going to mount");
-    }
 }
 
-const Button = (props) =>(
-    <button
-        onClick={props.update}>
-        {props.txt} - {props.val}
-        </button>
-)
-
-const Label = (props) =>(
-    <button
-        onMouseMove ={props.update}>
-        {props.txt} - {props.val}
-    </button>
-)
-
-
-let ButtonMixed = Mixin(Button);
-let LabelMixed=Mixin(Label);
-
-class App extends React.Component {
-
-    render() {
-        console.log("rrefnderijng");
-        //console.log(this.state.increasing);
-        return (
-            <div>
-                <ButtonMixed txt="Button"/>
-                <LabelMixed txt="Label"/>
-            </div>
-        );
-    }
+const PersonRow = (props) => {
+    "use strict";
+    return (
+        <tr>
+            <td>{props.data.id}</td>
+            <td>{props.data.name}</td>
+        </tr>
+    )
 }
 
-//App.defaultProps = {val:0}
 
 $(function() {
     ReactDOM.render(
